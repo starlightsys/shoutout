@@ -62,6 +62,7 @@ function generatePreview() {
       supporters.appendChild(nameElement);
     });
   }
+  textFit(document.getElementsByClassName('name'), { maxFontSize: 60 });
 }
 
 function downloadImage() {
