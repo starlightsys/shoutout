@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patreon Shoutout Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -54,20 +57,47 @@
       height: 100%;
     }
 
+    #render .background {
+      position: absolute;
+      top: 0;
+      left: 840px;
+      width: 1080px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    #render header {
+      position: absolute;
+      top: 20px;
+      left: 880px;
+      font-family: "Roboto", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      font-size: 143pt;
+      color: white;
+      text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 10px black;
+    }
+
     #supporters {
+      position: absolute;
+      top: 250px;
+      left: 880px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+      justify-content: left;
+      align-items: left;
       overflow: hidden;
     }
 
     .name {
-      font-size: 24px;
-      font-weight: bold;
       margin: 5px 0;
-      text-align: center;
+      font-size: 60pt;
+      text-align: left;
+      font-family: "Roboto", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      color: #f82350;
+      text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 5px black;
     }
 
     textarea {
@@ -89,10 +119,18 @@
     <div id="preview">
         <div id="preview-background"></div>
         <div id="render">
-          <div class="supporters"></div>
+          <div class="background"></div>
+          <header>Supporters</header>
+          <section id="supporters"></section>
         </div>
     </div>
-    <textarea id="nameInput" placeholder="Paste names here, one per line..."></textarea>
+    <textarea id="nameInput" placeholder="Paste names here, one per line...">StubbyStubby
+AndyKappn
+Aztec Dragon
+TheRadicalAlex
+Ritzin
+Turretoforth
+    </textarea>
     <button onclick="generatePreview()">Generate Preview</button>
     <button onclick="downloadImage()">Download Image</button>
   </div>
@@ -100,6 +138,9 @@
   <script>
     const preview = document.getElementById('preview');
     const previewBg = document.getElementById('preview-background');
+    const render = document.getElementById('render');
+    const supporters = document.getElementById('supporters');
+
     const nameInput = document.getElementById('nameInput');
     const backgroundInput = document.getElementById('backgroundInput');
     const toggleBackground = document.getElementById('toggleBackground');
@@ -123,7 +164,7 @@
 
     function generatePreview() {
       // Clear existing content
-      render.innerHTML = '';
+      supporters.innerHTML = '';
 
       // Get names from the textarea
       const names = nameInput.value.trim().split('\n');
@@ -133,7 +174,7 @@
         const nameElement = document.createElement('div');
         nameElement.classList.add('name');
         nameElement.textContent = name;
-        render.appendChild(nameElement);
+        supporters.appendChild(nameElement);
       });
     }
 
