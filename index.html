@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patreon Shoutout Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    #preview {
+      width: 1920px;
+      aspect-ratio: 16/9;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #preview-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: none;
+      background-position: center;
+      background-size: cover;
+      display: hidden;
+    }
+
+    #render {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #supporters {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 5px 0;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-bottom: 10px;
+    }
+
+    #backgroundInput, #toggleBackground {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Patreon Shoutout Tool</h1>
+    <input type="file" id="backgroundInput" accept="image/*" onchange="setBackground()">
+    <label><input type="checkbox" id="toggleBackground" onchange="toggleBackgroundVisibility()" checked> Show Background</label>
+    <div id="preview">
+        <div id="preview-background"></div>
+        <div id="render">
+          <div class="supporters"></div>
+        </div>
+    </div>
+    <textarea id="nameInput" placeholder="Paste names here, one per line..."></textarea>
+    <button onclick="generatePreview()">Generate Preview</button>
+    <button onclick="downloadImage()">Download Image</button>
+  </div>
+
+  <script>
+    const preview = document.getElementById('preview');
+    const previewBg = document.getElementById('preview-background');
+    const nameInput = document.getElementById('nameInput');
+    const backgroundInput = document.getElementById('backgroundInput');
+    const toggleBackground = document.getElementById('toggleBackground');
+    let backgroundImage = null;
+
+    function setBackground() {
+      const file = backgroundInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          backgroundImage = e.target.result;
+          previewBg.style.backgroundImage = `url('${backgroundImage}')`;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function toggleBackgroundVisibility() {
+      previewBg.style.visibility = toggleBackground.checked ? 'visible' : 'hidden';
+    }
+
+    function generatePreview() {
+      // Clear existing content
+      render.innerHTML = '';
+
+      // Get names from the textarea
+      const names = nameInput.value.trim().split('\n');
+
+      // Add names to the preview
+      names.forEach(name => {
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('name');
+        nameElement.textContent = name;
+        render.appendChild(nameElement);
+      });
+    }
+
+    function downloadImage() {
+      // Temporarily hide the background image for export
+      //const originalBackground = preview.style.backgroundImage;
+      //preview.style.backgroundImage = 'none';
+
+      html2canvas(render, {
+        width: 1920,
+        height: 1080,
+        backgroundColor: null,
+        useCORS: true
+      }).then(canvas => {
+        // Restore the original background
+        //preview.style.backgroundImage = originalBackground;
+
+        const link = document.createElement('a');
+        link.download = 'patreon_shoutout.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(error => {
+        console.error("Error generating the image: ", error);
+        alert("Failed to generate image. Please try again.");
+      });
+    }
+  </script>
+
+  <!-- Include html2canvas library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
