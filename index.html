@@ -97,22 +97,23 @@
     }
 
     #supporters {
-      display: flex;
-      flex-flow: column wrap;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
       position: absolute;
       top: 250px;
       left: 880px;
       height: 800px;
       width: 1000px;
-      justify-content: left;
-      align-content: flex-start;
-      align-items: flex-start;
       overflow: hidden;
       gap: 2px 40px;
+      /*grid-template-columns: repeat(auto-fit, minmax(400px, 800px));*/
+    }
+
+    .column {
     }
     
-    #supporters > * {
-      display: flex;
+    .name {
       font-size: 60pt;
       text-align: left;
       font-family: "Roboto", sans-serif;
@@ -120,6 +121,7 @@
       font-style: normal;
       color: #f82350;
       text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 5px black;
+      text-wrap: nowrap;
     }
   </style>
 </head>
@@ -193,12 +195,19 @@ Sebastian
       const names = nameInput.value.trim().split('\n');
 
       // Add names to the preview
-      names.forEach(name => {
-        const nameElement = document.createElement('div');
-        nameElement.classList.add('name');
-        nameElement.textContent = name;
-        supporters.appendChild(nameElement);
-      });
+      for (let i = 0; i < names.length; i += 8) {
+        const column = document.createElement('div');
+        column.classList.add('column');
+
+        names.slice(i, i+8).forEach(name => {
+          const nameElement = document.createElement('div');
+          nameElement.classList.add('name');
+          nameElement.textContent = name;
+          column.appendChild(nameElement);
+        });
+
+        supporters.appendChild(column);
+      }
     }
 
     function downloadImage() {
