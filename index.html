@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
   <style>
+    /* Tool styles */
     body {
       font-family: sans-serif;
       display: flex;
@@ -22,6 +23,22 @@
       align-items: center;
       max-width: 800px;
       width: 100%;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 10px;
+    }
+
+    #backgroundInput, #toggleBackground {
+      margin-bottom: 10px;
     }
 
     #preview {
@@ -57,6 +74,7 @@
       height: 100%;
     }
 
+    /* Custom layout styles */
     #render .background {
       position: absolute;
       top: 0;
@@ -79,18 +97,22 @@
     }
 
     #supporters {
+      display: flex;
+      flex-flow: column wrap;
       position: absolute;
       top: 250px;
       left: 880px;
-      display: flex;
-      flex-direction: column;
+      height: 800px;
+      width: 1000px;
       justify-content: left;
-      align-items: left;
+      align-content: flex-start;
+      align-items: flex-start;
       overflow: hidden;
+      gap: 2px 40px;
     }
-
-    .name {
-      margin: 5px 0;
+    
+    #supporters > * {
+      display: flex;
       font-size: 60pt;
       text-align: left;
       font-family: "Roboto", sans-serif;
@@ -98,16 +120,6 @@
       font-style: normal;
       color: #f82350;
       text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 5px black;
-    }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      margin-bottom: 10px;
-    }
-
-    #backgroundInput, #toggleBackground {
-      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -130,7 +142,14 @@ Aztec Dragon
 TheRadicalAlex
 Ritzin
 Turretoforth
-    </textarea>
+田中 村人
+Ærlend Øverås
+Johannes
+Sebastian
+Ærlend Øverås
+Ærlend Øverås
+Ærlend Øverås
+</textarea>
     <button onclick="generatePreview()">Generate Preview</button>
     <button onclick="downloadImage()">Download Image</button>
   </div>
@@ -158,6 +177,10 @@ Turretoforth
       }
     }
 
+    window.onload = function() {
+      generatePreview();
+    };
+
     function toggleBackgroundVisibility() {
       previewBg.style.visibility = toggleBackground.checked ? 'visible' : 'hidden';
     }
@@ -179,19 +202,12 @@ Turretoforth
     }
 
     function downloadImage() {
-      // Temporarily hide the background image for export
-      //const originalBackground = preview.style.backgroundImage;
-      //preview.style.backgroundImage = 'none';
-
       html2canvas(render, {
         width: 1920,
         height: 1080,
         backgroundColor: null,
         useCORS: true
       }).then(canvas => {
-        // Restore the original background
-        //preview.style.backgroundImage = originalBackground;
-
         const link = document.createElement('a');
         link.download = 'patreon_shoutout.png';
         link.href = canvas.toDataURL('image/png');
@@ -203,7 +219,6 @@ Turretoforth
     }
   </script>
 
-  <!-- Include html2canvas library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
