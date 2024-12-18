@@ -7,129 +7,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
-  <style>
-    /* Tool styles */
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 800px;
-      width: 100%;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    textarea {
-      width: 100%;
-      height: 200px;
-      margin-bottom: 10px;
-    }
-
-    #backgroundInput, #toggleBackground {
-      margin-bottom: 10px;
-    }
-
-    #preview {
-      width: 1920px;
-      aspect-ratio: 16/9;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: transparent;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #preview-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: none;
-      background-position: center;
-      background-size: cover;
-      display: hidden;
-    }
-
-    #render {
-      position: relative;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Custom layout styles */
-    #render .background {
-      position: absolute;
-      top: 0;
-      left: 840px;
-      width: 1080px;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    #render header {
-      position: absolute;
-      top: 20px;
-      left: 880px;
-      font-family: "Roboto", sans-serif;
-      font-weight: 700;
-      font-style: normal;
-      font-size: 143pt;
-      color: white;
-      text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 10px black;
-    }
-
-    #supporters {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: 1fr;
-      position: absolute;
-      top: 250px;
-      left: 880px;
-      height: 800px;
-      width: 1000px;
-      overflow: hidden;
-      gap: 2px 40px;
-      /*grid-template-columns: repeat(auto-fit, minmax(400px, 800px));*/
-    }
-
-    .column {
-    }
-    
-    .name {
-      font-size: 60pt;
-      text-align: left;
-      font-family: "Roboto", sans-serif;
-      font-weight: 700;
-      font-style: normal;
-      color: #f82350;
-      text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 5px black;
-      text-wrap: nowrap;
-    }
-  </style>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="custom.css">
 </head>
 <body>
   <div class="container">
     <h1>Patreon Shoutout Tool</h1>
     <input type="file" id="backgroundInput" accept="image/*" onchange="setBackground()">
     <label><input type="checkbox" id="toggleBackground" onchange="toggleBackgroundVisibility()" checked> Show Background</label>
+
     <div id="preview">
         <div id="preview-background"></div>
         <div id="render">
@@ -138,6 +24,7 @@
           <section id="supporters"></section>
         </div>
     </div>
+
     <textarea id="nameInput" placeholder="Paste names here, one per line...">StubbyStubby
 AndyKappn
 Aztec Dragon
@@ -155,92 +42,7 @@ Sebastian
     <button onclick="generatePreview()">Generate Preview</button>
     <button onclick="downloadImage()">Download Image</button>
   </div>
-
-  <script>
-    const preview = document.getElementById('preview');
-    const previewBg = document.getElementById('preview-background');
-    const render = document.getElementById('render');
-    const supporters = document.getElementById('supporters');
-
-    const nameInput = document.getElementById('nameInput');
-    const backgroundInput = document.getElementById('backgroundInput');
-    const toggleBackground = document.getElementById('toggleBackground');
-    let backgroundImage = null;
-
-    function setBackground() {
-      const file = backgroundInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          backgroundImage = e.target.result;
-          previewBg.style.backgroundImage = `url('${backgroundImage}')`;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    window.onload = function() {
-      generatePreview();
-    };
-
-    function toggleBackgroundVisibility() {
-      previewBg.style.visibility = toggleBackground.checked ? 'visible' : 'hidden';
-    }
-
-    function generatePreview() {
-      // Clear existing content
-      supporters.innerHTML = '';
-
-      // Get names from the textarea
-      const names = nameInput.value.trim().split('\n');
-
-      const useColumns = false;
-
-      if (useColumns) {
-        // Split names into groups of up to 8
-        for (let i = 0; i < names.length; i += 8) {
-          const column = document.createElement('div');
-          column.classList.add('column');
-
-          // Add remaining names to the current column
-          names.slice(i, i + 8).forEach(name => {
-            const nameElement = document.createElement('div');
-            nameElement.classList.add('name');
-            nameElement.textContent = name;
-            column.appendChild(nameElement);
-          });
-
-          supporters.appendChild(column);
-        }
-      } else {
-        // Add all names directly under supporters
-        names.forEach(name => {
-          const nameElement = document.createElement('div');
-          nameElement.classList.add('name');
-          nameElement.textContent = name;
-          supporters.appendChild(nameElement);
-        });
-      }
-    }
-
-    function downloadImage() {
-      html2canvas(render, {
-        width: 1920,
-        height: 1080,
-        backgroundColor: null,
-        useCORS: true
-      }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'patreon_shoutout.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      }).catch(error => {
-        console.error("Error generating the image: ", error);
-        alert("Failed to generate image. Please try again.");
-      });
-    }
-  </script>
-
+  <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>

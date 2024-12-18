@@ -1,0 +1,49 @@
+/* Custom layout styles */
+#render .background {
+  position: absolute;
+  top: 0;
+  left: 840px;
+  width: 1080px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#render header {
+  position: absolute;
+  top: 20px;
+  left: 880px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 143pt;
+  color: white;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 10px black;
+}
+
+#supporters {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  position: absolute;
+  top: 250px;
+  left: 880px;
+  height: 800px;
+  width: 1000px;
+  overflow: hidden;
+  gap: 2px 40px;
+  /*grid-template-columns: repeat(auto-fit, minmax(400px, 800px));*/
+}
+
+.column {
+}
+
+.name {
+  font-size: 60pt;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  color: #f82350;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0 0 5px black;
+  text-wrap: nowrap;
+}
