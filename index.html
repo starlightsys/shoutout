@@ -194,19 +194,32 @@ Sebastian
       // Get names from the textarea
       const names = nameInput.value.trim().split('\n');
 
-      // Add names to the preview
-      for (let i = 0; i < names.length; i += 8) {
-        const column = document.createElement('div');
-        column.classList.add('column');
+      const useColumns = false;
 
-        names.slice(i, i+8).forEach(name => {
+      if (useColumns) {
+        // Split names into groups of up to 8
+        for (let i = 0; i < names.length; i += 8) {
+          const column = document.createElement('div');
+          column.classList.add('column');
+
+          // Add remaining names to the current column
+          names.slice(i, i + 8).forEach(name => {
+            const nameElement = document.createElement('div');
+            nameElement.classList.add('name');
+            nameElement.textContent = name;
+            column.appendChild(nameElement);
+          });
+
+          supporters.appendChild(column);
+        }
+      } else {
+        // Add all names directly under supporters
+        names.forEach(name => {
           const nameElement = document.createElement('div');
           nameElement.classList.add('name');
           nameElement.textContent = name;
-          column.appendChild(nameElement);
+          supporters.appendChild(nameElement);
         });
-
-        supporters.appendChild(column);
       }
     }
 
